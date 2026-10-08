@@ -1,0 +1,14 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CineRate — Movie Reviews</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<header><div class="logo">Cine<span>Rate</span></div><nav><a href="#discover">Discover</a><a href="#top">Top Rated</a><a href="#write">Write a Review</a><a class="login" href="/login">Sign in</a></nav></header>
+<main>
+<section class="hero"><div><p class="eyebrow">YOUR NEXT FAVORITE MOVIE</p><h1>Find films worth<br><em>talking about.</em></h1><p class="lead">Discover great movies, see what people think, and share your own rating.</p><div class="search"><input id="search" placeholder="Search movies..."><button onclick="loadMovies()">Search</button></div></div><div class="heroCard"><div class="poster" style="background-image:url('https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg')"></div><div><small>FEATURED</small><h3>Interstellar</h3><b>★ 8.7</b></div></div></section>
+<section id="discover"><div class="sectionHead"><div><p class="eyebrow">DISCOVER</p><h2>Browse movies</h2></div><select id="genre" onchange="loadMovies()"><option value="">All genres</option><option>Sci-Fi</option><option>Action</option><option>Thriller</option><option>Drama</option></select></div><div id="grid" class="grid"></div></section>
+<section id="write" class="write"><div><p class="eyebrow">HAVE AN OPINION?</p><h2>Leave a review.</h2><p>Sign in and give the community your honest take.</p></div><a href="/login" class="button">Start reviewing →</a></section>
+</main><footer><div class="logo">Cine<span>Rate</span></div><p>Made for people who love movies.</p></footer>
+<script>
+async function loadMovies(){const q=encodeURIComponent(document.getElementById('search').value);const g=encodeURIComponent(document.getElementById('genre').value);const r=await fetch('/api/movies?q='+q+'&genre='+g);const movies=await r.json();document.getElementById('grid').innerHTML=movies.map(m=>`<article class="movie" onclick="showMovie(${m.id})"><img src="${m.poster}" alt="${m.title}"><div class="movieInfo"><div class="tag">${m.genre} · ${m.year}</div><h3>${m.title}</h3><p>${m.description}</p><strong>★ ${m.rating}</strong></div></article>`).join('')}
+async function showMovie(id){const r=await fetch('/api/movies?q=');const ms=await r.json();const m=ms.find(x=>x.id==id);if(m) alert(m.title+' — ★ '+m.rating+'\n\n'+m.description+'\n\nSign in to write your review.')}
+loadMovies();
+</script></body></html>
